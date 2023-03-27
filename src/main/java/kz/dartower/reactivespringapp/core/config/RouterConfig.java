@@ -19,9 +19,13 @@ public class RouterConfig {
                 .and(RequestPredicates.accept(MediaType.TEXT_PLAIN));
         var indexRoute = RequestPredicates
                 .GET("/");
+        var helloRouteJson = RequestPredicates
+                .GET("/helloJson")
+                .and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
 
         return RouterFunctions
                 .route(helloRoute, greetingHandler::hello)
-                .andRoute(indexRoute, greetingHandler::index);
+                .andRoute(indexRoute, greetingHandler::index)
+                .andRoute(helloRouteJson, greetingHandler::helloJson);
     }
 }
