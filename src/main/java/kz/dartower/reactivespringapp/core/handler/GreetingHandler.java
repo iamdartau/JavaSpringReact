@@ -27,12 +27,24 @@ public class GreetingHandler {
     }
 
     public Mono<ServerResponse> helloJson(ServerRequest request) {
+        Long start = request
+                .queryParam("start")
+                .map(Long::valueOf)
+                .orElse(0L);
+
+        Long count = request
+                .queryParam("count")
+                .map(Long::valueOf)
+                .orElse(3L);
+
         Flux<Message> data = Flux.just(
                         "first message",
                         "second message",
                         "third message",
                         "fourth message",
                         "fifth message")
+                .skip(start)
+                .take(count)
                 .map(Message::new);
         return ServerResponse
                 .ok()
