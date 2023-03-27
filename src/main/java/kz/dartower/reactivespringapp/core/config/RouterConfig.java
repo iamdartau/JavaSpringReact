@@ -14,18 +14,14 @@ public class RouterConfig {
 
     @Bean
     public RouterFunction<ServerResponse> route(GreetingHandler greetingHandler) {
-        RequestPredicate route =
-                RequestPredicates
-                        .GET("/hello")
-                        .and(RequestPredicates.accept(MediaType.TEXT_PLAIN));
-        HandlerFunction<ServerResponse> mainPage = serverRequest -> {
-            String user = serverRequest.queryParam("user").orElse("nobody");
-            return ServerResponse
-                    .ok()
-                    .render("index", Map.of("user", user));
-        };
+        var helloRoute = RequestPredicates
+                .GET("/hello")
+                .and(RequestPredicates.accept(MediaType.TEXT_PLAIN));
+        var indexRoute = RequestPredicates
+                .GET("/");
+
         return RouterFunctions
-                .route(route, greetingHandler::hello)
-                .andRoute(RequestPredicates.GET("/"), mainPage);
+                .route(helloRoute, greetingHandler::hello)
+                .andRoute(indexRoute, greetingHandler::index);
     }
 }
